@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  terraform:
+    image: .
+    hostname: minio
+    command: [tail, -f, /dev/null]
+    container_name: terraform
+    environment:
+      MINIO_ACCESS_KEY: admin
+      MINIO_SECRET_KEY: secretsecret
+    volumes:
+    - .:/app
+    working_dir: /app
+    tty: true
+
+  minio:
+    image: minio/minio
+    command: [server, /data]
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: admin
+      MINIO_SECRET_KEY: secretsecret
+    volumes:
+    - minio_data:/data
+   
+volumes:
+  minio_data:
+
